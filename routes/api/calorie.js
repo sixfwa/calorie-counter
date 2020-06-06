@@ -51,4 +51,28 @@ router.post("/", auth, async (req, res) => {
   }
 });
 
+/*
+  @route  GET api/calorie/:date
+  @desc   Get the calorie count for the authorised user
+  @access Private 
+*/
+router.get("/:date", auth, async (req, res) => {
+  try {
+    const calorie = await Calorie.find({
+      user: req.user.id,
+      date: req.params.date,
+    });
+
+    if (calorie.length === 0)
+      return res.status(400).json({ msg: "Calorie entry not found" });
+
+    res.json(calorie);
+  } catch (error) {
+    console.error(error.message);
+    if (error.kind === "ObjecID")
+      return res.status(400).json({ msg: "Calorie entry not found" });
+    res.status(500).send("Server Error");
+  }
+});
+
 module.exports = router;
