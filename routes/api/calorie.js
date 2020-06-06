@@ -30,7 +30,6 @@ router.post("/", auth, async (req, res) => {
 
     // If the calorie exists then make the necessary updates
     if (calorie.length !== 0) {
-      console.log(calorie);
       calorie = await Calorie.findOneAndUpdate(
         { user: req.user.id },
         { $set: calorieFields },
